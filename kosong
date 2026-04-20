@@ -1,0 +1,282 @@
+import { useEffect, useRef } from "react";
+
+export default function Pricing() {
+  const stageRef = useRef(null);
+  const canvasRef = useRef(null);
+  const logoRef = useRef(null);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    const canvas = canvasRef.current;
+    const logo = logoRef.current;
+    if (!stage || !canvas || !logo) return;
+
+    const ctx = canvas.getContext("2d");
+
+    const colors = [
+      "#FF4B6E", "#FF8C00", "#FFD700", "#00E676", "#00B0FF",
+      "#AA00FF", "#FF1744", "#00E5FF", "#76FF03", "#FF6D00",
+    ];
+
+    let colorIdx = 0;
+    let currentColor = colors[0];
+    let x = 0, y = 0;
+    let vx = 1.8, vy = 1.4;
+    const SPEED = 2.8;
+    let lastTime = null;
+    let raf;
+
+    // particles pool
+    let particles = [];
+    // ripples
+    let ripples = [];
+    // trail
+    let trail = [];
+    // scale pop
+    let scalePop = 1;
+    let scalePopVel = 0;
+    // flash
+    let flashAlpha = 0;
+    // shimmer
+    let shimmerT = 0;
+
+    function normalize() {
+      const mag = Math.sqrt(vx * vx + vy * vy);
+      vx = (vx / mag) * SPEED;
+      vy = (vy / mag) * SPEED;
+    }
+    normalize();
+
+    function resize() {
+      canvas.width = stage.clientWidth;
+      canvas.height = stage.clientHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    function spawnParticles(px, py, color) {
+      for (let i = 0; i < 22; i++) {
+        const angle = (Math.PI * 2 * i) / 22 + (Math.random() - 0.5) * 0.5;
+        const speed = 1.5 + Math.random() * 4;
+        particles.push({
+          x: px, y: py,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          size: 2 + Math.random() * 3,
+          color,
+          life: 0.6 + Math.random() * 0.6,
+          age: 0,
+        });
+      }
+    }
+
+    function spawnRipple(px, py, color) {
+      ripples.push({ x: px, y: py, r: 4, maxR: 90 + Math.random() * 40, alpha: 0.7, color });
+      ripples.push({ x: px, y: py, r: 4, maxR: 55 + Math.random() * 20, alpha: 0.5, color });
+    }
+
+    function tick(ts) {
+      if (!lastTime) lastTime = ts;
+      const dt = Math.min((ts - lastTime) / 16.67, 3);
+      lastTime = ts;
+
+      const stageW = stage.clientWidth;
+      const stageH = stage.clientHeight;
+      const logoW = logo.offsetWidth;
+      const logoH = logo.offsetHeight;
+
+      shimmerT += dt * 0.03;
+
+      // scale pop spring
+      scalePopVel += (1 - scalePop) * 0.35 * dt;
+      scalePopVel *= 0.82;
+      scalePop += scalePopVel * dt;
+
+      // flash decay
+      flashAlpha = Math.max(0, flashAlpha - 0.04 * dt);
+
+      let nx = x + vx * dt;
+      let ny = y + vy * dt;
+      let bounced = false;
+      let bounceX = 0, bounceY = 0;
+
+      if (nx <= 0) {
+        nx = 0; vx = Math.abs(vx); bounced = true;
+        bounceX = nx + logoW / 2; bounceY = ny + logoH / 2;
+      } else if (nx + logoW >= stageW) {
+        nx = stageW - logoW; vx = -Math.abs(vx); bounced = true;
+        bounceX = nx + logoW / 2; bounceY = ny + logoH / 2;
+      }
+      if (ny <= 0) {
+        ny = 0; vy = Math.abs(vy); bounced = true;
+        bounceX = nx + logoW / 2; bounceY = ny;
+      } else if (ny + logoH >= stageH) {
+        ny = stageH - logoH; vy = -Math.abs(vy); bounced = true;
+        bounceX = nx + logoW / 2; bounceY = ny + logoH;
+      }
+
+      if (bounced) {
+        colorIdx = (colorIdx + 1) % colors.length;
+        currentColor = colors[colorIdx];
+        logo.style.color = currentColor;
+        spawnParticles(bounceX, bounceY, currentColor);
+        spawnRipple(bounceX, bounceY, currentColor);
+        scalePop = 1.22;
+        scalePopVel = 0;
+        flashAlpha = 0.13;
+      }
+
+      x = nx; y = ny;
+
+      // trail
+      trail.push({ x: x + logoW / 2, y: y + logoH / 2, alpha: 0.55 });
+      if (trail.length > 28) trail.shift();
+
+      // === draw ===
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // flash overlay
+      if (flashAlpha > 0) {
+        ctx.fillStyle = `rgba(255,255,255,${flashAlpha})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // radial glow behind logo
+      const cx = x + logoW / 2;
+      const cy = y + logoH / 2;
+      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 110);
+      grd.addColorStop(0, hexAlpha(currentColor, 0.28));
+      grd.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // trail
+      for (let i = 0; i < trail.length; i++) {
+        const t = trail[i];
+        const frac = i / trail.length;
+        const r = 3 + frac * 5;
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = hexAlpha(currentColor, frac * 0.35);
+        ctx.fill();
+      }
+
+      // ripples
+      ripples = ripples.filter(rp => rp.alpha > 0.01);
+      for (const rp of ripples) {
+        rp.r += 2.5 * dt;
+        rp.alpha *= 0.94;
+        ctx.beginPath();
+        ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+        ctx.strokeStyle = hexAlpha(rp.color, rp.alpha);
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      // particles
+      particles = particles.filter(p => p.age < p.life);
+      for (const p of particles) {
+        p.age += 0.016 * dt;
+        p.vy += 0.08 * dt; // gravity
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.alpha = Math.max(0, 1 - p.age / p.life);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * p.alpha, 0, Math.PI * 2);
+        ctx.fillStyle = hexAlpha(p.color, p.alpha);
+        ctx.fill();
+      }
+
+      // update logo position + scale pop + shimmer opacity
+      logo.style.left = x + "px";
+      logo.style.top = y + "px";
+      logo.style.transform = `scale(${scalePop.toFixed(4)})`;
+      const shimmer = 0.82 + 0.18 * Math.sin(shimmerT * Math.PI * 2);
+      logo.style.opacity = shimmer.toFixed(3);
+
+      raf = requestAnimationFrame(tick);
+    }
+
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={stageRef}
+      style={{
+        width: "100%",
+        height: "calc(100vh - 69px)",
+        background: "#0a0a0f",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        ref={logoRef}
+        style={{
+          position: "absolute",
+          textAlign: "center",
+          userSelect: "none",
+          lineHeight: 1,
+          color: "#FF4B6E",
+          transformOrigin: "center center",
+          willChange: "transform, opacity, left, top",
+        }}
+      >
+        <span
+          style={{
+            display: "block",
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 52,
+            fontWeight: 900,
+            letterSpacing: 6,
+            textShadow: "0 0 28px currentColor, 0 0 8px currentColor",
+          }}
+        >
+          PRICING
+        </span>
+        <span
+          style={{
+            display: "block",
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 13,
+            fontWeight: 400,
+            letterSpacing: 10,
+            transform: "scaleY(0.55)",
+            transformOrigin: "top center",
+            marginTop: 2,
+            opacity: 0.85,
+            textShadow: "0 0 12px currentColor",
+          }}
+        >
+          UPCOMING
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function hexAlpha(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
