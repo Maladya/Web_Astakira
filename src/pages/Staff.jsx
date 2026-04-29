@@ -143,13 +143,13 @@ export default function Staff() {
   };
 
   const members = [
-    { foto: "images/anggota/1.jpg", nama: "Mahesa Radithya Priady",          jabatan: "Owner" },
-    { foto: "images/anggota/2.jpg", nama: "Rayhan Hanif Fauziy",             jabatan: "UI/UX Designer" },
-    { foto: "images/anggota/3.jpg", nama: "Adya Ahmad Pramudya",             jabatan: "Frontend Developer" },
-    { foto: "images/anggota/4.jpg", nama: "Azriel Anwar Firjatullah",        jabatan: "Backend Developer" },
-    { foto: "images/anggota/5.jpg", nama: "Rania Nuramalia",                 jabatan: "UI/UX Designer / Project Manager" },
-    { foto: "images/anggota/6.jpg", nama: "Rahadi Rahman",                   jabatan: "Project Manager / Frontend Developer" },
-    { foto: "images/anggota/7.jpg", nama: "Lusi Indah Permata",              jabatan: "Tester" },
+    { foto: "images/anggota/1.JPG", nama: "Mahesa Radithya Priady",          jabatan: "Owner" },
+    { foto: "images/anggota/2.JPG", nama: "Rayhan Hanif Fauziy",             jabatan: "UI/UX Designer" },
+    { foto: "images/anggota/3.JPG", nama: "Adya Ahmad Pramudya",             jabatan: "Frontend Developer" },
+    { foto: "images/anggota/4.JPG", nama: "Azriel Anwar Firjatullah",        jabatan: "Backend Developer" },
+    { foto: "images/anggota/5.JPG", nama: "Rania Nuramalia",                 jabatan: "UI/UX Designer / Project Manager" },
+    { foto: "images/anggota/6.JPG", nama: "Rahadi Rahman",                   jabatan: "Project Manager / Frontend Developer" },
+    { foto: "images/anggota/7.JPG", nama: "Lusi Indah Permata",              jabatan: "Tester" },
   ];
 
   const handleCardClick = (member, idx) => {
