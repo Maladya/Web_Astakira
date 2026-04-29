@@ -416,7 +416,7 @@ function Home() {
                 fontWeight: 400,
               }}
             >
-              Astakira media adalah perusahaan software house yang berfokus pada pengembangan solusi digital berbasis teknologi modern. Kami berkomitmen untuk memberikan layanan terbaik dalam pengembangan aplikasi yang inovatif, efisien, dan sesuai kebutuhan klien.
+              Astakira adalah perusahaan software house yang berfokus pada pengembangan solusi digital berbasis teknologi modern. Kami berkomitmen untuk memberikan layanan terbaik dalam pengembangan aplikasi yang inovatif, efisien, dan sesuai kebutuhan klien.
             </p>
           </div>
         </div>
