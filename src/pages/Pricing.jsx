@@ -75,7 +75,7 @@ export default function Pricing() {
   const plans = [
     {
       name: "Paket Dasar",
-      price: "Rp99K",
+      price: "Rp299K",
       subtitle: "Cocok untuk usaha baru",
       frontBg: "#E6F1FB",
       border: "1.5px solid #B5D4F4",
@@ -94,7 +94,7 @@ export default function Pricing() {
     },
     {
       name: "Paket Bisnis",
-      price: "Rp199K",
+      price: "Rp499K",
       subtitle: "Ideal untuk restoran berkembang",
       badge: "Paling populer",
       frontBg: "#185FA5",
@@ -114,7 +114,7 @@ export default function Pricing() {
     },
     {
       name: "Paket Pro",
-      price: "Rp399K",
+      price: "Rp999K",
       subtitle: "Untuk chain & franchise",
       frontBg: "#042C53",
       border: "1.5px solid #0C447C",

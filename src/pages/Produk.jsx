@@ -91,14 +91,8 @@ export default function Produk() {
 
       <Section
         heading="As Blanc"
-        href="https://asblanc.mycafe-order.net/"
+        href="https://cafe-asblanc.mycafe-order.net/"
         items={asblancItems}
-      />
-
-      <Section
-        heading="Menu Cafe"
-        href="https://cafe.mycafe-order.net/"
-        items={menucafeItems}
       />
     </div>
   );

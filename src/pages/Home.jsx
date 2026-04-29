@@ -4,40 +4,16 @@ import Button from "../components/Button";
 
 const SERVICES = [
   {
-    icon: "⚡",
-    name: "Landing Page",
-    desc: "Halaman konversi tinggi untuk kampanye iklan, product launch, atau promo event spesial.",
-    price: "Mulai Rp 1,5 Juta",
-  },
-  { 
-    icon: "🏢",
-    name: "Company Profile",
-    desc: "Tampilkan profesionalisme bisnis Anda dengan website elegan yang memperkuat kepercayaan.",
-    price: "Mulai Rp 3 Juta",
-  },
-  {
-    icon: "🛒",
-    name: "Toko Online / E-Commerce",
-    desc: "Platform belanja lengkap: keranjang, payment gateway, dan manajemen produk mudah.",
-    price: "Mulai Rp 5 Juta",
+    icon: "💻",
+    name: "Website Development",
+    desc: "Kami menyediakan berbagai jenis website seperti company profile, toko online, dan landing page yang dirancang sesuai kebutuhan Anda, dengan kualitas tinggi dan harga yang tetap terjangkau",
+   
   },
   {
     icon: "📱",
-    name: "Desain UI/UX",
-    desc: "Wireframe & prototipe interaktif yang memastikan pengguna jatuh cinta sebelum dikoding.",
-    price: "Mulai Rp 2 Juta",
-  },
-  {
-    icon: "🔍",
-    name: "SEO & Performa",
-    desc: "Website cepat, aman, mudah ditemukan. Audit teknis, optimasi Core Web Vitals, strategi konten.",
-    price: "Rp 800 Rb/bln",
-  },
-  {
-    icon: "🛠️",
-    name: "Maintenance & Support",
-    desc: "Update rutin, backup, perbaikan bug, dan support responsif agar website berjalan optimal.",
-    price: "Rp 500 Rb/bln",
+    name: "Mobile App Development",
+    desc: "Kami menyediakan layanan pengembangan aplikasi mobile kustom dengan UI/UX profesional serta integrasi backend yang andal untuk mendukung kebutuhan bisnis Anda.",
+    
   },
 ];
 
@@ -159,8 +135,7 @@ function Hero({ gravityRef }) {
             fontWeight: 400,
           }}
         >
-          Kami merancang dan membangun website premium yang tidak hanya indah —
-          tapi bekerja keras mengkonversi pengunjung menjadi pelanggan.
+         Kami membantu mendorong pertumbuhan bisnis Anda melalui teknologi
         </p>
       </div>
       <div
@@ -175,32 +150,12 @@ function Hero({ gravityRef }) {
             flexWrap: "wrap",
           }}
         >
-          <NavLink
-            to="/produk"
-            style={{
-              textDecoration: "none",
-              padding: "var(--btn-pad)",
-              borderRadius: 50,
-              fontSize: "var(--btn-font)",
-              fontWeight: 600,
-              cursor: "pointer",
-              fontFamily: "inherit",
-              border: "none",
-              transition: "transform .2s, box-shadow .2s, background .2s",
-              background: "transparent",
-              color: "#0b1b35",
-              border: "1px solid rgba(25,118,210,0.35)",
-              display: "inline-block"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "none";
-            }}
+          <Button 
+            variant="primary"
+            onClick={() => window.open('https://wa.me/6281318680606', '_blank')}
           >
-            Lihat Hasil Kerja Kami
-          </NavLink>
+            Konsultasi Gratis
+          </Button>
         </div>
       </div>
     </section>
@@ -385,6 +340,88 @@ function Home() {
 
       <Marquee />
 
+      {/* About Section */}
+      <div style={section}>
+        <div ref={(el) => gravityRef.current.push(el)} style={{ marginBottom: 44 }}>
+          <div style={sectionLabel}>Tentang Kami</div>
+          <div style={sectionTitle}>
+            ASTAKIRA
+            <br />
+            MEDIA
+          </div>
+        </div>
+        <div
+          ref={(el) => gravityRef.current.push(el)}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 60,
+            alignItems: "center",
+          }}
+        >
+          {/* Foto Team - Kiri */}
+          <div
+            style={{
+              position: "relative",
+              borderRadius: 20,
+              overflow: "hidden",
+              boxShadow: "0 20px 60px rgba(11,94,215,0.15)",
+              maxWidth: "320px",
+              margin: "0 auto",
+            }}
+          >
+            <img
+              src="public/images/astakira.jpg"
+              alt="Team Astakira Media"
+              style={{
+                width: "100%",
+                height: "auto",
+                display: "block",
+                borderRadius: 20,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "linear-gradient(135deg, rgba(11,94,215,0.1), transparent)",
+                pointerEvents: "none",
+              }}
+            />
+          </div>
+
+          {/* About Text - Kanan */}
+          <div>
+            <h3
+              style={{
+                fontFamily: "var(--heading)",
+                fontSize: "1.8rem",
+                fontWeight: 400,
+                color: "#096bcdff",
+                marginBottom: 24,
+                letterSpacing: "1px",
+              }}
+            >
+              Studio Digital Creative
+            </h3>
+            <p
+              style={{
+                color: "rgba(11,27,53,0.8)",
+                fontSize: "1.1rem",
+                lineHeight: 1.6,
+                marginBottom: 16,
+                fontWeight: 400,
+              }}
+            >
+              Astakira media adalah perusahaan software house yang berfokus pada pengembangan solusi digital berbasis teknologi modern. Kami berkomitmen untuk memberikan layanan terbaik dalam pengembangan aplikasi yang inovatif, efisien, dan sesuai kebutuhan klien.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div style={section}>
         <div ref={(el) => gravityRef.current.push(el)} style={{ marginBottom: 44 }}>
           <div style={sectionLabel}>Layanan Kami</div>
@@ -402,8 +439,7 @@ function Home() {
               lineHeight: 1.7,
             }}
           >
-            Dari desain hingga peluncuran, kami handle semua — sehingga Anda bisa
-            fokus ke bisnis.
+            Kami menyediakan layanan digital yang membantu bisnis Anda berkembang
           </p>
         </div>
         <div
@@ -441,79 +477,82 @@ function Home() {
         </div>
       </div>
 
-      <div
-        style={{
-          maxWidth: "var(--container-max)",
-          margin: "0 auto",
-          padding: "0 var(--container-pad) 100px",
-        }}
-      >
+      {/* Clients Section */}
+      <div style={{ ...section, padding: "40px var(--container-pad)" }}>
+        <div ref={(el) => gravityRef.current.push(el)} style={{ marginBottom: 30 }}>
+          <div style={sectionLabel}>Klien Kami</div>
+          <div style={sectionTitle}>
+            Dipercaya Oleh
+          </div>
+        </div>
         <div
           ref={(el) => gravityRef.current.push(el)}
           style={{
-            background: "linear-gradient(135deg,rgba(11,94,215,0.12),rgba(56,189,248,0.10))",
-            border: "1px solid rgba(25,118,210,0.22)",
-            borderRadius: 28,
-            padding: "72px 40px",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-            backdropFilter: "blur(12px)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
+          {/* Client 1 */}
           <div
             style={{
-              position: "absolute",
-              top: -60,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: 300,
-              height: 300,
-              pointerEvents: "none",
-              background:
-                "radial-gradient(circle,rgba(11,94,215,0.16) 0%,transparent 70%)",
+              background: "rgba(255,255,255,0.8)",
+              border: "1px solid rgba(25,118,210,0.15)",
+              borderRadius: 16,
+              padding: 20,
+              textAlign: "center",
+              transition: "transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease",
+              backdropFilter: "blur(10px)",
+              animation: "fadeInUp 0.6s ease both",
             }}
-          />
-          <h2
-            style={{
-              fontFamily: "var(--font-heading)",
-              fontSize: "clamp(1.8rem,4vw,2.8rem)",
-              fontWeight: 900,
-              letterSpacing: "-1.5px",
-              marginBottom: 16,
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-6px) scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 16px 40px rgba(11,94,215,0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "none";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
-            Siap Meluncur{" "}
-            <span
+            <img
+              src="public/images/logo.jpg"
+              alt="Client 1"
               style={{
-                background: "linear-gradient(135deg,#0b5ed7,#38bdf8)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                width: "80px",
+                height: "auto",
+                borderRadius: 8,
+                marginBottom: 12,
+                objectFit: "cover",
+                transition: "transform 0.3s ease",
               }}
-            >
-              Bersama Kami?
-            </span>
-          </h2>
-          <p
-            style={{
-              color: "rgba(11,27,53,0.72)",
-              fontSize: "0.95rem",
-              marginBottom: 36,
-              fontWeight: 400,
-            }}
-          >
-            Konsultasi pertama gratis. Tidak ada komitmen, tidak ada tekanan —
-            hanya percakapan yang jujur.
-          </p>
-          <Button 
-            variant="primary"
-            onClick={() => window.open('https://wa.me/6281318680606', '_blank')}
-          >
-            Hubungi Sekarang
-          </Button>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "rotate(5deg) scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "none";
+              }}
+            />
+            <div style={{ fontSize: "0.8rem", color: "rgba(11,27,53,0.7)", fontWeight: 500 }}>
+              Website Menu
+            </div>
+          </div>
         </div>
       </div>
-    </>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+
+          </>
   );
 }
 
