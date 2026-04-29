@@ -143,13 +143,13 @@ export default function Staff() {
   };
 
   const members = [
-    { foto: "public/images/anggota/1.jpg", nama: "Mahesa Radithya Priady",          jabatan: "Owner" },
-    { foto: "public/images/anggota/2.jpg", nama: "Rayhan Hanif Fauziy",             jabatan: "UI/UX Designer" },
-    { foto: "public/images/anggota/3.jpg", nama: "Adya Ahmad Pramudya",             jabatan: "Frontend Developer" },
-    { foto: "public/images/anggota/4.jpg", nama: "Azriel Anwar Firjatullah",        jabatan: "Backend Developer" },
-    { foto: "public/images/anggota/5.jpg", nama: "Rania Nuramalia",                 jabatan: "UI/UX Designer / Project Manager" },
-    { foto: "public/images/anggota/6.jpg", nama: "Rahadi Rahman",                   jabatan: "Project Manager / Frontend Developer" },
-    { foto: "public/images/anggota/7.jpg", nama: "Lusi Indah Permata",              jabatan: "Tester" },
+    { foto: "images/anggota/1.jpg", nama: "Mahesa Radithya Priady",          jabatan: "Owner" },
+    { foto: "images/anggota/2.jpg", nama: "Rayhan Hanif Fauziy",             jabatan: "UI/UX Designer" },
+    { foto: "images/anggota/3.jpg", nama: "Adya Ahmad Pramudya",             jabatan: "Frontend Developer" },
+    { foto: "images/anggota/4.jpg", nama: "Azriel Anwar Firjatullah",        jabatan: "Backend Developer" },
+    { foto: "images/anggota/5.jpg", nama: "Rania Nuramalia",                 jabatan: "UI/UX Designer / Project Manager" },
+    { foto: "images/anggota/6.jpg", nama: "Rahadi Rahman",                   jabatan: "Project Manager / Frontend Developer" },
+    { foto: "images/anggota/7.jpg", nama: "Lusi Indah Permata",              jabatan: "Tester" },
   ];
 
   const handleCardClick = (member, idx) => {
@@ -198,18 +198,18 @@ export default function Staff() {
   const getCurrentImage = (baseImage, index) => {
     // Manual mapping for each staff member's second image
     const manualImageMap = {
-      "1": "public/images/anggota/1.2.jpg",
-      "2": "public/images/anggota/2.2.jpg", 
-      "3": "public/images/anggota/3.2.jpg",
-      "4": "public/images/anggota/4.2.jpg",
-      "5": "public/images/anggota/5.2.jpg",
-      "6": "public/images/anggota/6.2.jpg",
-      "7": "public/images/anggota/7.2.jpg"
+      "1": "images/anggota/1.2.jpg",
+      "2": "images/anggota/2.2.jpg", 
+      "3": "images/anggota/3.2.jpg",
+      "4": "images/anggota/4.2.jpg",
+      "5": "images/anggota/5.2.jpg",
+      "6": "images/anggota/6.2.jpg",
+      "7": "images/anggota/7.2.jpg"
     };
     
     if (index === 0) return baseImage; // First image stays as .jpg
     
-    // Extract the number from baseImage (e.g., "1" from "public/images/anggota/1.jpg")
+    // Extract the number from baseImage (e.g., "1" from "images/anggota/1.jpg")
     const baseNum = baseImage.match(/\/(\d+)\.jpg$/)[1];
     
     // Return the manually mapped second image

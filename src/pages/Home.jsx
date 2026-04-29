@@ -371,7 +371,7 @@ function Home() {
             }}
           >
             <img
-              src="public/images/astakira.jpg"
+              src="images/astakira.jpg"
               alt="Team Astakira Media"
               style={{
                 width: "100%",
@@ -515,7 +515,7 @@ function Home() {
             }}
           >
             <img
-              src="public/images/logo.jpg"
+              src="images/logo.jpg"
               alt="Client 1"
               style={{
                 width: "80px",
