@@ -1,302 +1,285 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { buildWhatsAppUrl, PrimaryCTA } from "./ui";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
-  const dropdownRef = useRef(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(window.scrollY > 8);
 
   useEffect(() => {
-    const onResize = () => {
-      const mobile = window.innerWidth < 640;
-      setIsMobile(mobile);
-      if (!mobile) setIsOpen(false);
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e) => { if (e.key === "Escape") setIsOpen(false); };
-    const onOut = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
-        setIsOpen(false);
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setIsMobileMenuOpen(false);
     };
-    window.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onOut);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onOut);
-    };
-  }, [isOpen]);
 
-  const links = [
-    { to: "/",        label: "Home"    },
-    { to: "/produk",  label: "Produk"  },
-    { to: "/anggota", label: "Staff"   },
-    { to: "/pricing", label: "Harga" },
-  ];
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  const links = useMemo(
+    () => [
+      { to: "/", label: "Home" },
+      { to: "/produk", label: "Produk" },
+      { to: "/anggota", label: "Staff" },
+      { to: "/pricing", label: "Pricing" },
+    ],
+    []
+  );
 
   const navLinkStyle = ({ isActive }) => ({
+    position: "relative",
+    padding: "10px 14px",
+    borderRadius: 999,
     textDecoration: "none",
-    fontSize: "0.88rem",
-    fontWeight: isActive ? 700 : 500,
-    color: isActive ? "#0b5ed7" : "rgba(11,27,53,0.65)",
-    padding: "6px 14px",
-    borderRadius: 8,
-    transition: "all .15s",
-    backgroundColor: isActive ? "rgba(25,118,210,0.08)" : "transparent",
-    whiteSpace: "nowrap",
+    fontWeight: isActive ? 800 : 700,
+    color: isActive ? "#0b5ed7" : "rgba(11,27,53,0.76)",
+    background: isActive ? "rgba(11,94,215,0.08)" : "transparent",
+    transition: "all .2s ease",
   });
-
-  const HamburgerIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <line x1="3" y1="6"  x2="21" y2="6"  />
-      <line x1="3" y1="12" x2="21" y2="12" />
-      <line x1="3" y1="18" x2="21" y2="18" />
-    </svg>
-  );
-
-  const CloseIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <line x1="18" y1="6"  x2="6"  y2="18" />
-      <line x1="6"  y1="6"  x2="18" y2="18" />
-    </svg>
-  );
 
   return (
     <>
-      <nav
+      <header
         style={{
           position: "sticky",
           top: 0,
-          zIndex: 100,
-          backdropFilter: "blur(24px) saturate(180%)",
-          background: "rgba(255,255,255,0.85)",
-          borderBottom: "1px solid rgba(255,255,255,0.2)",
-          boxShadow: "0 8px 32px rgba(31,38,135,0.15)",
-          padding: "0 32px",
-          height: 70,
-          display: "flex",
-          alignItems: "center",
-          transition: "all 0.3s ease",
+          zIndex: 200,
+          padding: "16px 16px 0",
         }}
       >
-        <div
+        <nav
           style={{
-            maxWidth: 1100,
-            width: "100%",
+            maxWidth: 1280,
             margin: "0 auto",
+            minHeight: 70,
+            borderRadius: 999,
+            border: `1px solid ${scrolled ? "rgba(59,130,246,0.22)" : "rgba(59,130,246,0.14)"}`,
+            background: scrolled ? "rgba(255,255,255,0.88)" : "rgba(255,255,255,0.74)",
+            backdropFilter: "blur(18px) saturate(180%)",
+            boxShadow: scrolled ? "0 16px 40px rgba(10,22,40,0.08)" : "0 12px 30px rgba(10,22,40,0.05)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 16,
+            padding: "10px 14px",
           }}
         >
-          {/* Logo */}
           <NavLink
             to="/"
             style={{
-              display: "flex",
+              display: "inline-flex",
               alignItems: "center",
               gap: 12,
               textDecoration: "none",
               flexShrink: 0,
-              transition: "transform 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
+              color: "#081a33",
             }}
           >
             <div
               style={{
                 width: 42,
                 height: 42,
-                borderRadius: 12,
-                background: "linear-gradient(135deg,#0b5ed7,#38bdf8)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 4px 16px rgba(11,94,215,0.25)",
-                transition: "all 0.3s ease",
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: "2px solid rgba(255,255,255,0.9)",
+                boxShadow: "0 10px 22px rgba(11,94,215,0.18)",
               }}
             >
               <img
                 src="/images/astakira.jpg"
                 alt="Astakira"
-                style={{ 
-                  width: 32, 
-                  height: 32, 
-                  borderRadius: 8, 
-                  objectFit: "cover",
-                  border: "2px solid rgba(255,255,255,0.9)"
-                }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
-            <span
-              style={{
-                fontFamily: "var(--heading)",
-                fontWeight: 800,
-                fontSize: "1.3rem",
-                background: "linear-gradient(135deg,#0b5ed7,#38bdf8)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                letterSpacing: "-0.5px",
-                textShadow: "0 2px 4px rgba(11,94,215,0.1)",
-              }}
-            >
-              Astakira Media
-            </span>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(11,27,53,0.58)" }}>
+                Astakira Media
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.03em" }}>
+                Digital Solutions
+              </div>
+            </div>
           </NavLink>
 
-          {/* Desktop links */}
-          {!isMobile && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              {links.map(({ to, label }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  style={({ isActive }) => ({
-                    textDecoration: "none",
-                    fontSize: "0.9rem",
-                    fontWeight: isActive ? 700 : 500,
-                    color: isActive ? "#0b5ed7" : "rgba(11,27,53,0.7)",
-                    padding: "10px 16px",
-                    borderRadius: 12,
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    backgroundColor: isActive 
-                      ? "linear-gradient(135deg,rgba(11,94,215,0.15),rgba(56,189,248,0.1))" 
-                      : "transparent",
-                    border: isActive ? "1px solid rgba(11,94,215,0.2)" : "1px solid transparent",
-                    position: "relative",
-                    overflow: "hidden",
-                    fontFamily: "var(--heading)",
-                    letterSpacing: "0.3px",
-                  })}
-                  onMouseEnter={(e) => {
-                    if (!e.currentTarget.style.backgroundColor.includes('gradient')) {
-                      e.currentTarget.style.backgroundColor = "rgba(11,94,215,0.08)";
-                      e.currentTarget.style.borderColor = "rgba(11,94,215,0.3)";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.boxShadow = "0 4px 12px rgba(11,94,215,0.15)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    const isActive = e.currentTarget.style.backgroundColor.includes('gradient');
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                      e.currentTarget.style.borderColor = "transparent";
-                      e.currentTarget.style.transform = "none";
-                      e.currentTarget.style.boxShadow = "none";
-                    } else {
-                      e.currentTarget.style.transform = "none";
-                      e.currentTarget.style.boxShadow = "none";
-                    }
-                  }}
-                >
-                  {label}
+          <div style={{ display: "none" }}>
+            {links.map((item) => (
+              <NavLink key={item.to} to={item.to} style={navLinkStyle}>
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <div
+              className="desktop-nav"
+              style={{
+                display: "none",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              {links.map((item) => (
+                <NavLink key={item.to} to={item.to} style={navLinkStyle}>
+                  {item.label}
                 </NavLink>
               ))}
             </div>
-          )}
 
-          {/* Mobile links */}
-          {isMobile && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <button
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 40,
-                  height: 40,
-                  borderRadius: 12,
-                  background: "transparent",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                }}
-                onClick={() => setIsOpen(!isOpen)}
+            <div className="desktop-cta" style={{ display: "none" }}>
+              <PrimaryCTA
+                href={buildWhatsAppUrl("Halo Astakira, saya ingin konsultasi proyek digital saya.")}
+                small
+                style={{ minHeight: 42, padding: "10px 16px" }}
               >
-                {isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              </button>
-
-              {/* Dropdown */}
-              <div
-                ref={dropdownRef}
-                style={{
-                  position: "absolute",
-                  top: "calc(100% + 10px)",
-                  right: 0,
-                  width: 220,
-                  background: "rgba(255,255,255,0.95)",
-                  backdropFilter: "blur(20px) saturate(180%)",
-                  borderRadius: 16,
-                  border: "1px solid rgba(255,255,255,0.3)",
-                  boxShadow: "0 16px 40px rgba(31,38,135,0.2)",
-                  padding: "12px",
-                  opacity: isOpen ? 1 : 0,
-                  transform: isOpen ? "translateY(0) scale(1)" : "translateY(-10px) scale(0.95)",
-                  pointerEvents: isOpen ? "auto" : "none",
-                  transition: "opacity 0.3s ease, transform 0.3s cubic-bezier(.4,0,.2,1)",
-                  transformOrigin: "top right",
-                }}
-              >
-                {links.map(({ to, label }, i) => (
-                  <NavLink
-                    key={to}
-                    to={to}
-                    onClick={() => setIsOpen(false)}
-                    style={({ isActive }) => ({
-                      display: "block",
-                      textDecoration: "none",
-                      fontSize: "0.9rem",
-                      fontWeight: isActive ? 700 : 500,
-                      color: isActive ? "#0b5ed7" : "rgba(11,27,53,0.7)",
-                      backgroundColor: isActive 
-                        ? "linear-gradient(135deg,rgba(11,94,215,0.15),rgba(56,189,248,0.1))" 
-                        : "transparent",
-                      padding: "12px 16px",
-                      borderRadius: 12,
-                      transition: "all 0.2s ease",
-                      animation: isOpen ? `dropIn 0.3s ease ${i * 0.08}s both` : "none",
-                      fontFamily: "var(--heading)",
-                      letterSpacing: "0.3px",
-                      border: isActive ? "1px solid rgba(11,94,215,0.2)" : "1px solid transparent",
-                    })}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "rgba(11,94,215,0.08)";
-                      e.currentTarget.style.transform = "translateX(4px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!e.currentTarget.style.backgroundColor.includes('gradient')) {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                        e.currentTarget.style.transform = "none";
-                      } else {
-                        e.currentTarget.style.transform = "none";
-                      }
-                    }}
-                  >
-                    {label}
-                  </NavLink>
-                ))}
-              </div>
+                Konsultasi
+              </PrimaryCTA>
             </div>
-          )}
-        </div>
-      </nav>
+
+            <button
+              className="focus-ring"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Buka menu"
+              style={{
+                width: 46,
+                height: 46,
+                borderRadius: "50%",
+                border: "1px solid rgba(11,94,215,0.14)",
+                background: "rgba(255,255,255,0.72)",
+                color: "#081a33",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <line x1="4" y1="7" x2="20" y2="7" />
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="17" x2="20" y2="17" />
+              </svg>
+            </button>
+          </div>
+        </nav>
+      </header>
 
       <style>{`
-        @keyframes dropIn {
-          from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
+        @media (min-width: 920px) {
+          .desktop-nav,
+          .desktop-cta {
+            display: flex !important;
+          }
+          header button[aria-label="Buka menu"] {
+            display: none !important;
+          }
+        }
+
+        .mobile-menu-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 400;
+          background: rgba(10, 22, 40, 0.94);
+          backdrop-filter: blur(20px);
+          color: white;
+          display: flex;
+          flex-direction: column;
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(-10px);
+          transition: opacity .25s ease, transform .25s ease;
+        }
+
+        .mobile-menu-overlay.open {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0);
+        }
+
+        .mobile-menu-link {
+          display: block;
+          padding: 18px 0;
+          color: #fff;
+          text-decoration: none;
+          font-size: clamp(1.8rem, 5vw, 2.9rem);
+          font-weight: 800;
+          letter-spacing: -0.05em;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .mobile-menu-link.active {
+          color: #60a5fa;
         }
       `}</style>
+
+      <div className={`mobile-menu-overlay ${isMobileMenuOpen ? "open" : ""}`}>
+        <div style={{ maxWidth: 980, width: "100%", margin: "0 auto", padding: "18px 20px 28px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 34 }}>
+            <div style={{ fontWeight: 800, letterSpacing: "-0.03em" }}>Menu</div>
+            <button
+              className="focus-ring"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Tutup menu"
+              style={{
+                width: 46,
+                height: 46,
+                borderRadius: "50%",
+                border: "1px solid rgba(255,255,255,0.15)",
+                background: "rgba(255,255,255,0.06)",
+                color: "#fff",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+
+          <div style={{ display: "grid", gap: 8 }}>
+            {links.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={({ isActive }) => `mobile-menu-link ${isActive ? "active" : ""}`}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+
+          <div style={{ marginTop: 28, display: "grid", gap: 12 }}>
+            <PrimaryCTA
+              href={buildWhatsAppUrl("Halo Astakira, saya ingin konsultasi cepat lewat menu mobile.")}
+            >
+              Konsultasi via WhatsApp
+            </PrimaryCTA>
+            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 14, lineHeight: 1.6 }}>
+              Fast response, cocok untuk diskusi proyek singkat maupun estimasi kebutuhan.
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

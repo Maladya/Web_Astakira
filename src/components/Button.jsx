@@ -2,40 +2,40 @@ import React from "react";
 
 export default function Button({ children, variant = "primary", onClick, style: extraStyle }) {
   const base = {
-    padding: "var(--btn-pad)",
-    borderRadius: 50,
-    fontSize: "var(--btn-font)",
-    fontWeight: 600,
+    padding: "13px 22px",
+    borderRadius: 999,
+    fontSize: 15,
+    fontWeight: 700,
     cursor: "pointer",
     fontFamily: "inherit",
-    border: "none",
-    transition: "transform .2s, box-shadow .2s, background .2s",
+    border: "1px solid transparent",
+    transition: "transform .2s, box-shadow .2s, background .2s, border-color .2s",
     ...extraStyle,
   };
   const styles = {
     primary: {
       background: "linear-gradient(135deg,#0b5ed7,#2563eb)",
       color: "#fff",
-      boxShadow: "0 10px 34px rgba(11,94,215,0.28)",
+      boxShadow: "0 14px 30px rgba(11,94,215,0.22)",
     },
     ghost: {
       background: "transparent",
-      color: "#0b1b35",
-      border: "1px solid rgba(25,118,210,0.35)",
+      color: "#0b5ed7",
+      border: "1px solid rgba(11,94,215,0.24)",
     },
     gravity: {
       background: "linear-gradient(135deg,#0b5ed7,#38bdf8)",
       color: "#fff",
-      boxShadow: "0 10px 34px rgba(11,94,215,0.30)",
+      boxShadow: "0 14px 30px rgba(11,94,215,0.25)",
       letterSpacing: "0.5px",
       fontFamily: "inherit",
     },
     reset: {
-      background: "rgba(20,20,30,0.95)",
+      background: "rgba(10,22,40,0.95)",
       color: "#fff",
-      border: "1px solid rgba(25,118,210,0.30)",
-      fontWeight: 500,
-      fontSize: "0.82rem",
+      border: "1px solid rgba(59,130,246,0.22)",
+      fontWeight: 600,
+      fontSize: 13,
     },
   };
 
